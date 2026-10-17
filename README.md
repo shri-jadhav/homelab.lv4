@@ -59,6 +59,13 @@ This lab serves as an end-to-end detection engineering and SOC platform designed
 
 ---
 <img width="685" height="706" alt="image" src="https://github.com/user-attachments/assets/8d221409-facc-4a57-aa31-a294999c9075" />
+<img width="1918" height="947" alt="Screenshot 2026-10-17 105139" src="https://github.com/user-attachments/assets/b68d22d8-7287-4b5c-8c31-81c23c7a30e7" />
+<img width="1900" height="909" alt="image" src="https://github.com/user-attachments/assets/46e9449e-78a3-4a62-8525-f4164fb0239b" />
+<img width="793" height="842" alt="image" src="https://github.com/user-attachments/assets/fadb017b-f174-48e3-a79b-1daf139df136" />
+<img width="670" height="859" alt="image" src="https://github.com/user-attachments/assets/4842ce87-b239-43cf-92ce-419b95a45c1f" />
+<img width="656" height="803" alt="image" src="https://github.com/user-attachments/assets/7cca03cf-556d-4edd-b651-14bce78c412f" />
+<img width="675" height="760" alt="image" src="https://github.com/user-attachments/assets/1325aee4-da1e-4986-a279-97ab5214f4e5" />
+
 
 ## 2. Core Components
 
