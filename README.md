@@ -58,6 +58,7 @@ This lab serves as an end-to-end detection engineering and SOC platform designed
 ```
 
 ---
+<img width="685" height="706" alt="image" src="https://github.com/user-attachments/assets/8d221409-facc-4a57-aa31-a294999c9075" />
 
 ## 2. Core Components
 
