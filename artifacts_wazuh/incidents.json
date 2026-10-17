@@ -5,12 +5,12 @@
     "severity": "medium",
     "status": "open",
     "entity": "User: soc_test_attacker (Source: 127.0.0.1)",
-    "first_seen": "2026-10-17T00:55:28.718000Z",
-    "last_seen": "2026-10-17T00:55:40.953000Z",
+    "first_seen": "2026-10-17T03:33:34.746000Z",
+    "last_seen": "2026-10-17T03:34:52.769000Z",
     "alert_count": 1,
-    "event_count": 5,
+    "event_count": 10,
     "alert_ids": [
-      "DET-AUTH-001-WAZUH-1792198540.160776"
+      "DET-AUTH-001-WAZUH-1792208092.562053"
     ],
     "rule_ids": [
       "DET-AUTH-001"
@@ -23,8 +23,8 @@
     ],
     "timeline": [
       {
-        "timestamp": "2026-10-17T00:55:28.718000Z",
-        "event_id": "WAZUH-1792198528.136372",
+        "timestamp": "2026-10-17T03:33:34.746000Z",
+        "event_id": "WAZUH-1792208014.473491",
         "host": "shri",
         "event_type": "auth",
         "user": "soc_test_attacker",
@@ -33,8 +33,8 @@
         "description": "Authentication FAILED (failure) for 'soc_test_attacker' from 127.0.0.1 on shri - Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
       },
       {
-        "timestamp": "2026-10-17T00:55:33.451000Z",
-        "event_id": "WAZUH-1792198533.142473",
+        "timestamp": "2026-10-17T03:33:39.307000Z",
+        "event_id": "WAZUH-1792208019.482210",
         "host": "shri",
         "event_type": "auth",
         "user": "soc_test_attacker",
@@ -43,8 +43,8 @@
         "description": "Authentication FAILED (failure) for 'soc_test_attacker' from 127.0.0.1 on shri - Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
       },
       {
-        "timestamp": "2026-10-17T00:55:35.975000Z",
-        "event_id": "WAZUH-1792198535.148574",
+        "timestamp": "2026-10-17T03:33:42.109000Z",
+        "event_id": "WAZUH-1792208022.488311",
         "host": "shri",
         "event_type": "auth",
         "user": "soc_test_attacker",
@@ -53,8 +53,8 @@
         "description": "Authentication FAILED (failure) for 'soc_test_attacker' from 127.0.0.1 on shri - Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
       },
       {
-        "timestamp": "2026-10-17T00:55:38.451000Z",
-        "event_id": "WAZUH-1792198538.154675",
+        "timestamp": "2026-10-17T03:33:44.687000Z",
+        "event_id": "WAZUH-1792208024.494412",
         "host": "shri",
         "event_type": "auth",
         "user": "soc_test_attacker",
@@ -63,8 +63,58 @@
         "description": "Authentication FAILED (failure) for 'soc_test_attacker' from 127.0.0.1 on shri - Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
       },
       {
-        "timestamp": "2026-10-17T00:55:40.953000Z",
-        "event_id": "WAZUH-1792198540.160776",
+        "timestamp": "2026-10-17T03:33:46.908000Z",
+        "event_id": "WAZUH-1792208026.500513",
+        "host": "shri",
+        "event_type": "auth",
+        "user": "soc_test_attacker",
+        "source_ip": "127.0.0.1",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'soc_test_attacker' from 127.0.0.1 on shri - Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
+      },
+      {
+        "timestamp": "2026-10-17T03:34:40.576000Z",
+        "event_id": "WAZUH-1792208080.515295",
+        "host": "shri",
+        "event_type": "auth",
+        "user": "soc_test_attacker",
+        "source_ip": "127.0.0.1",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'soc_test_attacker' from 127.0.0.1 on shri - Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
+      },
+      {
+        "timestamp": "2026-10-17T03:34:45.226000Z",
+        "event_id": "WAZUH-1792208085.521396",
+        "host": "shri",
+        "event_type": "auth",
+        "user": "soc_test_attacker",
+        "source_ip": "127.0.0.1",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'soc_test_attacker' from 127.0.0.1 on shri - Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
+      },
+      {
+        "timestamp": "2026-10-17T03:34:47.889000Z",
+        "event_id": "WAZUH-1792208087.527497",
+        "host": "shri",
+        "event_type": "auth",
+        "user": "soc_test_attacker",
+        "source_ip": "127.0.0.1",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'soc_test_attacker' from 127.0.0.1 on shri - Wazuh Rule 60204: Multiple Windows Logon Failures (EventID: 4625)"
+      },
+      {
+        "timestamp": "2026-10-17T03:34:49.499000Z",
+        "event_id": "WAZUH-1792208089.555952",
+        "host": "shri",
+        "event_type": "auth",
+        "user": "soc_test_attacker",
+        "source_ip": "127.0.0.1",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'soc_test_attacker' from 127.0.0.1 on shri - Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
+      },
+      {
+        "timestamp": "2026-10-17T03:34:52.769000Z",
+        "event_id": "WAZUH-1792208092.562053",
         "host": "shri",
         "event_type": "auth",
         "user": "soc_test_attacker",
