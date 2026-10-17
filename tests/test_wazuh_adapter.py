@@ -73,6 +73,41 @@ class WazuhAdapterTests(unittest.TestCase):
         self.assertEqual("privilege_change", sec_event.event_type)
         self.assertEqual("success", sec_event.outcome)
         self.assertEqual("Administrators", sec_event.role)
+        self.assertEqual("a.patel", sec_event.user)
+
+    def test_member_name_extraction_formats(self):
+        """Active Directory and local memberName formats must extract the target member account correctly."""
+        base_alert = {
+            "timestamp": "2026-10-17T02:15:00.000+0000",
+            "rule": {"level": 10, "id": "60114", "description": "Group member add"},
+            "data": {
+                "win": {
+                    "eventdata": {
+                        "targetUserName": "Domain Admins",
+                        "memberName": r"CORP\svc_backup",
+                    },
+                    "system": {"eventID": "4728"},
+                }
+            },
+        }
+        ev1 = map_wazuh_alert_to_event(base_alert, 1)
+        self.assertEqual("svc_backup", ev1.user)
+        self.assertEqual("Domain Admins", ev1.role)
+
+        # SID fallback or simple account name
+        base_alert["data"]["win"]["eventdata"]["memberName"] = "S-1-5-21-12345-500"
+        ev2 = map_wazuh_alert_to_event(base_alert, 2)
+        self.assertEqual("S-1-5-21-12345-500", ev2.user)
+
+    def test_missing_user_on_logon_failure_defaults_to_unknown(self):
+        """Logon failure alert without targetUserName or TargetUserName must default to 'unknown'."""
+        alert = {
+            "timestamp": "2026-10-17T02:10:00.000+0000",
+            "rule": {"id": "60122", "description": "Logon Failure"},
+            "data": {"win": {"eventdata": {}, "system": {"eventID": "4625"}}},
+        }
+        ev = map_wazuh_alert_to_event(alert, 1)
+        self.assertEqual("unknown", ev.user)
 
     def test_wazuh_alerts_feed_into_detection_engine(self):
         # 5 failure alerts + 1 success alert from Wazuh schema

@@ -479,6 +479,76 @@ class AdvancedDetectionBoundaryTests(unittest.TestCase):
         self.assertEqual(5, inc_dict["event_count"])
         self.assertEqual(5, len(inc_dict["timeline"]))
 
+    def test_unknown_source_ip_does_not_trigger_password_spraying(self):
+        """Events with unknown or missing source IP must not be aggregated into password spray alerts."""
+        events = [
+            self._create_auth_event(f"E-UNK-SP-{i}", f"2026-10-16T10:0{i}:00Z", f"user_{i}", "unknown")
+            for i in range(8)
+        ]
+        alerts = detect(events)
+        self.assertNotIn("DET-AUTH-002", {a["rule_id"] for a in alerts})
+
+    def test_unknown_user_and_unknown_ip_does_not_trigger_brute_force(self):
+        """Events where both user and source IP are unknown must not trigger brute force."""
+        events = [
+            self._create_auth_event(f"E-UNK-BF-{i}", f"2026-10-16T10:0{i}:00Z", "unknown", "unknown")
+            for i in range(5)
+        ]
+        alerts = detect(events)
+        self.assertNotIn("DET-AUTH-001", {a["rule_id"] for a in alerts})
+
+    def test_recon_burst_detection(self):
+        """DET-RECON-001 triggers when >= 3 discovery events execute in 5 minutes."""
+        events = [
+            {
+                "event_id": "EV-REC-1",
+                "timestamp": "2026-10-16T10:00:00Z",
+                "host": "WIN-LOQ",
+                "event_type": "process_start",
+                "user": "adversary",
+                "message": "whoami.exe /priv",
+                "extra": {"is_recon": True},
+            },
+            {
+                "event_id": "EV-REC-2",
+                "timestamp": "2026-10-16T10:01:00Z",
+                "host": "WIN-LOQ",
+                "event_type": "process_start",
+                "user": "adversary",
+                "message": "net.exe user",
+                "extra": {"is_recon": True},
+            },
+            {
+                "event_id": "EV-REC-3",
+                "timestamp": "2026-10-16T10:02:00Z",
+                "host": "WIN-LOQ",
+                "event_type": "process_start",
+                "user": "adversary",
+                "message": "net.exe localgroup Administrators",
+                "extra": {"is_recon": True},
+            },
+        ]
+        alerts = detect(events)
+        rule_ids = {a["rule_id"] for a in alerts}
+        self.assertIn("DET-RECON-001", rule_ids)
+
+    def test_persistence_scheduled_task_detection(self):
+        """DET-PERSIST-001 triggers when a scheduled task is created."""
+        events = [
+            {
+                "event_id": "EV-TASK-1",
+                "timestamp": "2026-10-16T10:05:00Z",
+                "host": "WIN-LOQ",
+                "event_type": "persistence",
+                "user": "adversary",
+                "message": "Scheduled task created: CanaryTask",
+                "extra": {"win_event_id": "4698"},
+            }
+        ]
+        alerts = detect(events)
+        rule_ids = {a["rule_id"] for a in alerts}
+        self.assertIn("DET-PERSIST-001", rule_ids)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

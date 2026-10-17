@@ -1,5 +1,5 @@
 {
-  "catalog_rules_count": 6,
+  "catalog_rules_count": 8,
   "rules_triggered_count": 4,
   "rules": [
     {
@@ -172,6 +172,64 @@
       "parameters": {
         "distinct_source_threshold": 4,
         "window_minutes": 15
+      }
+    },
+    {
+      "rule_id": "DET-RECON-001",
+      "title": "Suspicious host & privilege discovery burst",
+      "severity": "medium",
+      "mitre_attack": [
+        "T1087",
+        "T1082",
+        "T1049"
+      ],
+      "mitre_tactics": [
+        "Discovery"
+      ],
+      "description": "Observed at least 3 system discovery / enumeration activities (whoami, net user, net localgroup, ipconfig) on the same host within 5 minutes.",
+      "threshold": "3 discovery events / 5 minutes / same host",
+      "recommended_actions": [
+        "Verify parent process lineage (e.g. cmd.exe or powershell.exe spawned by word/browser or anomalous parent).",
+        "Interview the executing user to confirm operational intent.",
+        "Check for subsequent credential harvesting or lateral movement attempts on the host."
+      ],
+      "investigation_questions": [
+        "Was this activity performed by an authorized system administrator or developer during maintenance?",
+        "What parent process or user session spawned these discovery utilities?",
+        "Did network connections to external addresses occur immediately before or after these commands?"
+      ],
+      "enabled": true,
+      "parameters": {
+        "recon_threshold": 3,
+        "window_minutes": 5
+      }
+    },
+    {
+      "rule_id": "DET-PERSIST-001",
+      "title": "Suspicious or ephemeral scheduled task creation",
+      "severity": "high",
+      "mitre_attack": [
+        "T1053.005"
+      ],
+      "mitre_tactics": [
+        "Persistence",
+        "Execution"
+      ],
+      "description": "A scheduled task was created on the system (Windows Event ID 4698 / schtasks.exe).",
+      "threshold": "1 task creation event",
+      "recommended_actions": [
+        "Inspect the task action string, schedule triggers, and executing principal in Task Scheduler.",
+        "Verify file integrity and code signing for the executable referenced in the task.",
+        "If unauthorized, disable and delete the scheduled task and collect disk/memory forensic artifacts."
+      ],
+      "investigation_questions": [
+        "Does the scheduled task command point to a temporary folder (e.g., AppData, Temp) or script interpreter?",
+        "Is the task configured to run with elevated SYSTEM or Administrator privileges?",
+        "Was an approved change ticket or software installation active when the task was created?"
+      ],
+      "enabled": true,
+      "parameters": {
+        "threshold": 1
       }
     }
   ]

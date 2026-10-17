@@ -14,6 +14,22 @@ from .ingest import parse_timestamp
 from .models import IngestionReport, SecurityEvent
 
 
+def _extract_member_username(member_str: str) -> str:
+    """Extract account username from Windows MemberName (handles distinguished name DN or plain user)."""
+    if not member_str or member_str == "-":
+        return "unknown"
+    clean = str(member_str).strip()
+    if "CN=" in clean.upper():
+        for part in clean.split(","):
+            part_s = part.strip()
+            if part_s.upper().startswith("CN="):
+                clean = part_s[3:].strip()
+                break
+    if "\\" in clean:
+        clean = clean.split("\\", 1)[1].strip()
+    return clean
+
+
 def map_wazuh_alert_to_event(raw: dict[str, Any], event_index: int = 1) -> SecurityEvent:
     """Normalize a Wazuh alert dictionary into a SecurityEvent instance."""
     # 1. Timestamp extraction - do not fabricate fallback dates
@@ -43,11 +59,11 @@ def map_wazuh_alert_to_event(raw: dict[str, Any], event_index: int = 1) -> Secur
     raw_user = (
         event_data.get("targetUserName")
         or event_data.get("targetAccountName")
-        or event_data.get("subjectUserName")
         or raw.get("data", {}).get("user")
-        or "SYSTEM"
+        or event_data.get("subjectUserName")
+        or "unknown"
     )
-    user = str(raw_user).strip() if raw_user and raw_user != "-" else "SYSTEM"
+    user = str(raw_user).strip() if raw_user and raw_user != "-" else "unknown"
 
     raw_ip = (
         event_data.get("ipAddress")
@@ -90,10 +106,21 @@ def map_wazuh_alert_to_event(raw: dict[str, Any], event_index: int = 1) -> Secur
     ):
         event_type = "privilege_change"
         outcome = "success"
-        member = event_data.get("memberName") or event_data.get("targetUserName") or user
+        raw_member = event_data.get("memberName") or event_data.get("targetUserName") or user
         target_group = event_data.get("targetUserName") or "PrivilegedGroup"
+        user = _extract_member_username(raw_member)
         role = str(target_group)
-        message = f"Wazuh Rule {rule_id}: Member '{member}' added to '{target_group}' (EventID: {win_event_id})"
+        message = f"Wazuh Rule {rule_id}: Member '{user}' added to '{target_group}' (EventID: {win_event_id})"
+    elif (
+        win_event_id in {"4698", "4702", "7045"}
+        or "scheduled task" in rule_desc_lower
+        or "service installed" in rule_desc_lower
+    ):
+        event_type = "persistence"
+        outcome = "success"
+        role = ""
+        task_name = event_data.get("taskName") or event_data.get("serviceName") or "Task"
+        message = f"Wazuh Rule {rule_id}: Persistence artifact registered: {task_name} (EventID: {win_event_id})"
     elif (
         win_event_id in {"4688", "1"}
         or "process created" in rule_desc_lower
@@ -102,7 +129,10 @@ def map_wazuh_alert_to_event(raw: dict[str, Any], event_index: int = 1) -> Secur
         event_type = "process_start"
         outcome = "success"
         role = ""
-        message = f"Wazuh Rule {rule_id}: {rule_desc}"
+        cmd_line = event_data.get("commandLine") or event_data.get("CommandLine") or ""
+        proc_name = event_data.get("newProcessName") or event_data.get("processName") or ""
+        proc_str = f"{proc_name} {cmd_line}".strip() or rule_desc
+        message = f"Wazuh Rule {rule_id}: Process executed: {proc_str}"
     else:
         # Generic system, SCA, application, or audit events are categorized as 'system'
         event_type = "system"
@@ -121,6 +151,8 @@ def map_wazuh_alert_to_event(raw: dict[str, Any], event_index: int = 1) -> Secur
         "win_event_id": win_event_id,
         "raw_wazuh_alert": raw,
     }
+    if any(k in message.lower() for k in ["whoami", "net user", "net localgroup", "ipconfig", "systeminfo", "nltest"]):
+        extra["is_recon"] = True
 
     return SecurityEvent(
         event_id=event_id,

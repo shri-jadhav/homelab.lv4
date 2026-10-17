@@ -62,6 +62,7 @@ logs/
 *.pid
 ossec.log
 *.tmp
+data/wazuh_alerts_run-*.json
 
 # --- Docker Local Persistent Data ---
 wazuh-data/

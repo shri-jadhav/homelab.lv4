@@ -146,6 +146,26 @@ class DetectionEngine:
         if "DET-NET-001" in self.config.enabled_rules:
             raw_alerts.extend(self._detect_distributed_attack(auth_failures))
 
+        # 7. DET-RECON-001: Suspicious local discovery / reconnaissance burst
+        recon_events = [
+            e for e in sec_events
+            if e.event_type in {"reconnaissance", "process_start"}
+            or e.extra.get("is_recon")
+            or any(t in e.message.lower() for t in ["whoami", "net user", "net localgroup", "ipconfig", "systeminfo", "nltest"])
+        ]
+        if "DET-RECON-001" in self.config.enabled_rules and recon_events:
+            raw_alerts.extend(self._detect_recon_burst(recon_events))
+
+        # 8. DET-PERSIST-001: Suspicious or ephemeral scheduled task creation
+        persist_events = [
+            e for e in sec_events
+            if e.event_type in {"persistence", "service_created", "task_created"}
+            or e.extra.get("win_event_id") in {"4698", "7045"}
+            or "scheduled task" in e.message.lower()
+        ]
+        if "DET-PERSIST-001" in self.config.enabled_rules and persist_events:
+            raw_alerts.extend(self._detect_persistence(persist_events))
+
         # De-duplicate alerts across overlapping sliding windows
         deduped = self._deduplicate_alerts(raw_alerts)
 
@@ -206,6 +226,9 @@ class DetectionEngine:
         # Group by (source_ip, user)
         grouped: dict[tuple[str, str], list[SecurityEvent]] = defaultdict(list)
         for e in auth_failures:
+            # Ignore events where both user and source_ip are completely unknown
+            if (not e.user or e.user == "unknown") and (not e.source_ip or e.source_ip == "unknown"):
+                continue
             grouped[(e.source_ip, e.user)].append(e)
 
         for (ip, user), group in grouped.items():
@@ -241,6 +264,9 @@ class DetectionEngine:
         # Group by source_ip
         grouped: dict[str, list[SecurityEvent]] = defaultdict(list)
         for e in auth_failures:
+            # Skip failures with unknown/empty source IP to prevent false cross-enterprise correlation
+            if not e.source_ip or e.source_ip == "unknown":
+                continue
             grouped[e.source_ip].append(e)
 
         for ip, group in grouped.items():
@@ -405,7 +431,7 @@ class DetectionEngine:
             while idx < len(group):
                 start_dt = group[idx].dt
                 window = [e for e in group[idx:] if e.dt <= start_dt + win_delta]
-                distinct_ips = sorted({e.source_ip for e in window if e.source_ip != "unknown"})
+                distinct_ips = sorted({e.source_ip for e in window if e.source_ip and e.source_ip != "unknown"})
                 if len(distinct_ips) >= thresh:
                     alerts.append(self._create_alert(
                         rule_id="DET-NET-001",
@@ -423,6 +449,54 @@ class DetectionEngine:
                 else:
                     idx += 1
 
+        return alerts
+
+    def _detect_recon_burst(self, recon_events: list[SecurityEvent]) -> list[Alert]:
+        alerts: list[Alert] = []
+        thresh = self.config.recon_burst_threshold
+        win_delta = timedelta(minutes=self.config.recon_window_minutes)
+
+        # Group by (host, user)
+        grouped: dict[tuple[str, str], list[SecurityEvent]] = defaultdict(list)
+        for e in recon_events:
+            grouped[(e.host, e.user)].append(e)
+
+        for (host, user), group in grouped.items():
+            idx = 0
+            while idx < len(group):
+                start_dt = group[idx].dt
+                window = [e for e in group[idx:] if e.dt <= start_dt + win_delta]
+                if len(window) >= thresh:
+                    alerts.append(self._create_alert(
+                        rule_id="DET-RECON-001",
+                        events=window,
+                        entity=f"host={host}; user={user}",
+                        reason=(
+                            f"Observed {len(window)} rapid system discovery activities on host '{host}' by '{user}' "
+                            f"within {self.config.recon_window_minutes} minutes; threshold is {thresh}."
+                        ),
+                        first_dt=window[0].dt,
+                        last_dt=window[-1].dt,
+                        extra_context={"host": host, "user": user, "recon_commands": [e.message for e in window]},
+                    ))
+                    idx += len(window)
+                else:
+                    idx += 1
+
+        return alerts
+
+    def _detect_persistence(self, persist_events: list[SecurityEvent]) -> list[Alert]:
+        alerts: list[Alert] = []
+        for e in persist_events:
+            alerts.append(self._create_alert(
+                rule_id="DET-PERSIST-001",
+                events=[e],
+                entity=f"host={e.host}; user={e.user}",
+                reason=f"Scheduled task / persistence modification detected: {e.message or e.event_id}",
+                first_dt=e.dt,
+                last_dt=e.dt,
+                extra_context={"host": e.host, "user": e.user, "details": e.message},
+            ))
         return alerts
 
     def _deduplicate_alerts(self, alerts: list[Alert]) -> list[Alert]:

@@ -231,7 +231,7 @@ Verify ingestion parsing, timestamp normalization, rule thresholds, time-window 
 ```
 *Expected Result:*
 ```text
-Ran 33 tests in 0.040s
+Ran 37 tests in 0.040s
 OK
 ```
 
@@ -334,7 +334,7 @@ homelab.lv4/
 │       ├── rules.py                # Detection rule catalog & threshold definitions
 │       ├── sigma_validator.py      # Sigma YAML syntax & structure validation
 │       └── wazuh_adapter.py        # Wazuh SIEM JSON alert normalizer
-├── tests/                          # Automated unit test suite (33 tests)
+├── tests/                          # Automated unit test suite (37 tests)
 ├── artifacts/                      # Synthetic evaluation output artifacts & report.html
 └── artifacts_wazuh/                # Live Wazuh SIEM correlation output artifacts & report.html
 ```

@@ -49,6 +49,8 @@ class DetectionConfig:
     mfa_window_minutes: int = 10
     distributed_source_threshold: int = 4
     distributed_window_minutes: int = 15
+    recon_burst_threshold: int = 3
+    recon_window_minutes: int = 5
     suppress_approved_privilege_changes: bool = True
     enabled_rules: set[str] = field(default_factory=lambda: {
         "DET-AUTH-001",
@@ -57,6 +59,8 @@ class DetectionConfig:
         "DET-IAM-001",
         "DET-AUTH-004",
         "DET-NET-001",
+        "DET-RECON-001",
+        "DET-PERSIST-001",
     })
 
     @classmethod
@@ -262,6 +266,52 @@ def get_default_rule_catalog(config: DetectionConfig | None = None) -> dict[str,
                 "Assess if the account is subject to a targeted credential stuffing or botnet campaign.",
                 "Check whether password protection / smart lockout has engaged for the account.",
                 "Enforce conditional access policies and review geo-velocity anomalies.",
+            ],
+        ),
+        "DET-RECON-001": RuleDefinition(
+            rule_id="DET-RECON-001",
+            title="Suspicious host & privilege discovery burst",
+            severity="medium",
+            mitre_attack=["T1087", "T1082", "T1049"],
+            mitre_tactics=["Discovery"],
+            description=(
+                f"Observed at least {cfg.recon_burst_threshold} system discovery / enumeration activities "
+                f"(whoami, net user, net localgroup, ipconfig) on the same host within {cfg.recon_window_minutes} minutes."
+            ),
+            threshold=f"{cfg.recon_burst_threshold} discovery events / {cfg.recon_window_minutes} minutes / same host",
+            parameters={
+                "recon_threshold": cfg.recon_burst_threshold,
+                "window_minutes": cfg.recon_window_minutes,
+            },
+            investigation_questions=[
+                "Was this activity performed by an authorized system administrator or developer during maintenance?",
+                "What parent process or user session spawned these discovery utilities?",
+                "Did network connections to external addresses occur immediately before or after these commands?",
+            ],
+            recommended_actions=[
+                "Verify parent process lineage (e.g. cmd.exe or powershell.exe spawned by word/browser or anomalous parent).",
+                "Interview the executing user to confirm operational intent.",
+                "Check for subsequent credential harvesting or lateral movement attempts on the host.",
+            ],
+        ),
+        "DET-PERSIST-001": RuleDefinition(
+            rule_id="DET-PERSIST-001",
+            title="Suspicious or ephemeral scheduled task creation",
+            severity="high",
+            mitre_attack=["T1053.005"],
+            mitre_tactics=["Persistence", "Execution"],
+            description="A scheduled task was created on the system (Windows Event ID 4698 / schtasks.exe).",
+            threshold="1 task creation event",
+            parameters={"threshold": 1},
+            investigation_questions=[
+                "Does the scheduled task command point to a temporary folder (e.g., AppData, Temp) or script interpreter?",
+                "Is the task configured to run with elevated SYSTEM or Administrator privileges?",
+                "Was an approved change ticket or software installation active when the task was created?",
+            ],
+            recommended_actions=[
+                "Inspect the task action string, schedule triggers, and executing principal in Task Scheduler.",
+                "Verify file integrity and code signing for the executable referenced in the task.",
+                "If unauthorized, disable and delete the scheduled task and collect disk/memory forensic artifacts.",
             ],
         ),
     }

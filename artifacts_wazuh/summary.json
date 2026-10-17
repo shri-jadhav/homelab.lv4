@@ -1,26 +1,28 @@
 {
   "data_source": "wazuh_siem",
-  "events_processed": 50,
-  "alerts_generated": 1,
+  "events_processed": 13,
+  "alerts_generated": 2,
   "incidents_correlated": 1,
   "severity_breakdown": {
     "critical": 0,
-    "high": 0,
+    "high": 1,
     "medium": 1,
     "low": 0,
     "info": 0
   },
   "rules_triggered": [
-    "DET-AUTH-001"
+    "DET-AUTH-001",
+    "DET-AUTH-002"
   ],
-  "unique_rules_triggered": 1,
+  "unique_rules_triggered": 2,
   "mitre_techniques_observed": [
-    "T1110"
+    "T1110",
+    "T1110.003"
   ],
   "note": "Generated from genuine local Wazuh SIEM telemetry. Alerts require analyst validation.",
   "ingestion": {
-    "total_lines": 50,
-    "valid_events": 50,
+    "total_lines": 13,
+    "valid_events": 13,
     "quarantined_events": 0,
     "duplicate_events": 0,
     "dropped_empty_or_comments": 0,

@@ -15,6 +15,11 @@ SUPPORTED_EVENT_TYPES = {
     "mfa_challenge",
     "mfa_denial",
     "network_connection",
+    "persistence",
+    "reconnaissance",
+    "task_created",
+    "service_created",
+    "log_cleared",
     "system",
 }
 
