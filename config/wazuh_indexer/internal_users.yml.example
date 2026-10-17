@@ -1,0 +1,49 @@
+---
+# Wazuh Indexer Internal Users Template
+# Generate bcrypt hashes using the official OpenSearch / Wazuh security tool:
+# docker run --rm -ti wazuh/wazuh-indexer:4.14.9 /usr/share/wazuh-indexer/plugins/opensearch-security/tools/hash.sh -p <YOUR_PASSWORD>
+
+_meta:
+  type: "internalusers"
+  config_version: 2
+
+admin:
+  hash: "<PLACEHOLDER_BCRYPT_HASH_FOR_ADMIN>"
+  reserved: true
+  backend_roles:
+  - "admin"
+  description: "Wazuh Indexer Admin User"
+
+kibanaserver:
+  hash: "<PLACEHOLDER_BCRYPT_HASH_FOR_DASHBOARD>"
+  reserved: true
+  description: "Wazuh Dashboard Service Account"
+
+kibanaro:
+  hash: "<PLACEHOLDER_BCRYPT_HASH_FOR_READONLY>"
+  reserved: false
+  backend_roles:
+  - "kibanauser"
+  - "readall"
+  description: "Read-only Dashboard User"
+
+logstash:
+  hash: "<PLACEHOLDER_BCRYPT_HASH_FOR_LOGSTASH>"
+  reserved: false
+  backend_roles:
+  - "logstash"
+  description: "Logstash Ingestion User"
+
+readall:
+  hash: "<PLACEHOLDER_BCRYPT_HASH_FOR_READALL>"
+  reserved: false
+  backend_roles:
+  - "readall"
+  description: "Internal Read-all User"
+
+snapshotrestore:
+  hash: "<PLACEHOLDER_BCRYPT_HASH_FOR_SNAPSHOT>"
+  reserved: false
+  backend_roles:
+  - "snapshotrestore"
+  description: "Snapshot & Restore User"

@@ -1,0 +1,72 @@
+[
+  {
+    "scenario_id": "SCN-01",
+    "description": "Rapid password brute force against d.miller (5 failures in 2 min)",
+    "is_malicious": true,
+    "expected_rules": ["DET-AUTH-001"],
+    "rationale": "Matches DET-AUTH-001 threshold of 5 failures in 5 minutes from same IP and user."
+  },
+  {
+    "scenario_id": "SCN-02",
+    "description": "Horizontal password spraying across 8 distinct accounts from 203.0.113.200",
+    "is_malicious": true,
+    "expected_rules": ["DET-AUTH-002"],
+    "rationale": "Matches DET-AUTH-002 threshold of 8 distinct targeted users from 1 source IP in 10 minutes."
+  },
+  {
+    "scenario_id": "SCN-03-04",
+    "description": "Brute force followed by successful login and immediate DomainAdmin role escalation",
+    "is_malicious": true,
+    "expected_rules": ["DET-AUTH-001", "DET-AUTH-003", "DET-IAM-001"],
+    "rationale": "Full compromise sequence triggering brute-force, post-failure success, and privilege escalation."
+  },
+  {
+    "scenario_id": "SCN-05",
+    "description": "MFA prompt bombing / push exhaustion against c.taylor (2 denials in 1 min)",
+    "is_malicious": true,
+    "expected_rules": ["DET-AUTH-004"],
+    "rationale": "Matches DET-AUTH-004 threshold of 2 MFA denials within 10 minutes."
+  },
+  {
+    "scenario_id": "SCN-06",
+    "description": "Distributed botnet credential stuffing against vip_exec from 4 distinct IPs",
+    "is_malicious": true,
+    "expected_rules": ["DET-NET-001"],
+    "rationale": "Matches DET-NET-001 threshold of 4 distinct source IPs targeting 1 user within 15 minutes."
+  },
+  {
+    "scenario_id": "SCN-BEN-01",
+    "description": "Benign normal user password typo followed by success",
+    "is_malicious": false,
+    "expected_rules": [],
+    "rationale": "1 failure is not an attack; negative control demonstrating non-alerting behavior."
+  },
+  {
+    "scenario_id": "SCN-BEN-02",
+    "description": "Slow sporadic failed logins (2 failures spread over 35 minutes)",
+    "is_malicious": false,
+    "expected_rules": [],
+    "rationale": "Fails to meet failure rate threshold or time window."
+  },
+  {
+    "scenario_id": "SCN-BEN-03",
+    "description": "Shared corporate proxy with occasional normal logins/failures from 3 users",
+    "is_malicious": false,
+    "expected_rules": [],
+    "rationale": "Only 3 users (spray threshold requires 8); negative control for shared egress points."
+  },
+  {
+    "scenario_id": "SCN-BEN-04",
+    "description": "Authorized administrative role change with approved change ticket CHG-8812",
+    "is_malicious": false,
+    "expected_rules": [],
+    "rationale": "Privilege change is explicitly approved and not preceded by suspicious authentication."
+  },
+  {
+    "scenario_id": "SCN-BEN-05",
+    "description": "Boundary negative control: 4 failures in 2 minutes (threshold is 5)",
+    "is_malicious": false,
+    "expected_rules": [],
+    "rationale": "Strict boundary condition test; 4 failures should never trigger a threshold of 5."
+  }
+]

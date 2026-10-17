@@ -1,0 +1,23 @@
+title: Windows Repeated Authentication Failures (Event Level)
+id: 7aef5e55-a0f6-4d9a-b4ae-1415a2ab1e11
+status: experimental
+description: Detects an individual Windows Security authentication failure event. Use the Python correlation engine or a SIEM aggregation to apply a time-window threshold across repeated events.
+references:
+    - https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4625
+    - https://attack.mitre.org/techniques/T1110/
+author: SOC Detection Engineering Lab contributors
+date: 2026/10/17
+tags:
+    - attack.credential_access
+    - attack.t1110
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4625
+    condition: selection
+falsepositives:
+    - Users mistyping passwords
+    - Misconfigured services or scheduled tasks
+level: low

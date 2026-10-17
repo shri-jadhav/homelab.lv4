@@ -1,0 +1,82 @@
+[
+  {
+    "alert_id": "DET-AUTH-001-WAZUH-1792198540.160776",
+    "rule_id": "DET-AUTH-001",
+    "title": "Repeated authentication failures",
+    "severity": "medium",
+    "status": "new",
+    "entity": "user=soc_test_attacker; source_ip=127.0.0.1",
+    "first_seen": "2026-10-17T00:55:28.718000Z",
+    "last_seen": "2026-10-17T00:55:40.953000Z",
+    "event_count": 5,
+    "event_ids": [
+      "WAZUH-1792198528.136372",
+      "WAZUH-1792198533.142473",
+      "WAZUH-1792198535.148574",
+      "WAZUH-1792198538.154675",
+      "WAZUH-1792198540.160776"
+    ],
+    "mitre_attack": [
+      "T1110"
+    ],
+    "mitre_tactics": [
+      "Credential Access"
+    ],
+    "why_it_fired": "Observed 5 failed authentications for user 'soc_test_attacker' from 127.0.0.1 within 5 minutes; threshold is 5.",
+    "rule_threshold": "5 failures / 5 minutes / same user + source IP",
+    "recommended_actions": [
+      "Verify whether the source and target user are expected.",
+      "Check adjacent authentication events and endpoint telemetry.",
+      "If unauthorized, block or rate-limit the source through approved controls and reset affected credentials."
+    ],
+    "evidence": [
+      {
+        "event_id": "WAZUH-1792198528.136372",
+        "timestamp": "2026-10-17T00:55:28.718000Z",
+        "user": "soc_test_attacker",
+        "source_ip": "127.0.0.1",
+        "host": "shri",
+        "outcome": "failure",
+        "message": "Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
+      },
+      {
+        "event_id": "WAZUH-1792198533.142473",
+        "timestamp": "2026-10-17T00:55:33.451000Z",
+        "user": "soc_test_attacker",
+        "source_ip": "127.0.0.1",
+        "host": "shri",
+        "outcome": "failure",
+        "message": "Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
+      },
+      {
+        "event_id": "WAZUH-1792198535.148574",
+        "timestamp": "2026-10-17T00:55:35.975000Z",
+        "user": "soc_test_attacker",
+        "source_ip": "127.0.0.1",
+        "host": "shri",
+        "outcome": "failure",
+        "message": "Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
+      },
+      {
+        "event_id": "WAZUH-1792198538.154675",
+        "timestamp": "2026-10-17T00:55:38.451000Z",
+        "user": "soc_test_attacker",
+        "source_ip": "127.0.0.1",
+        "host": "shri",
+        "outcome": "failure",
+        "message": "Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
+      },
+      {
+        "event_id": "WAZUH-1792198540.160776",
+        "timestamp": "2026-10-17T00:55:40.953000Z",
+        "user": "soc_test_attacker",
+        "source_ip": "127.0.0.1",
+        "host": "shri",
+        "outcome": "failure",
+        "message": "Wazuh Rule 60122: Logon Failure - Unknown user or bad password (EventID: 4625)"
+      }
+    ],
+    "source_ip": "127.0.0.1",
+    "user": "soc_test_attacker"
+  }
+]

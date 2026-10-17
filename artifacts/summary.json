@@ -1,0 +1,36 @@
+{
+  "data_source": "synthetic_jsonl",
+  "events_processed": 18,
+  "alerts_generated": 4,
+  "incidents_correlated": 2,
+  "severity_breakdown": {
+    "critical": 1,
+    "high": 2,
+    "medium": 1,
+    "low": 0,
+    "info": 0
+  },
+  "rules_triggered": [
+    "DET-AUTH-001",
+    "DET-AUTH-002",
+    "DET-AUTH-003",
+    "DET-IAM-001"
+  ],
+  "unique_rules_triggered": 4,
+  "mitre_techniques_observed": [
+    "T1078",
+    "T1098",
+    "T1110",
+    "T1110.003"
+  ],
+  "note": "Generated from local synthetic lab dataset. Alerts require analyst validation.",
+  "ingestion": {
+    "total_lines": 18,
+    "valid_events": 18,
+    "quarantined_events": 0,
+    "duplicate_events": 0,
+    "dropped_empty_or_comments": 0,
+    "error_count": 0,
+    "errors": []
+  }
+}

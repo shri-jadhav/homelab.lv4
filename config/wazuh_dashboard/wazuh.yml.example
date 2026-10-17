@@ -1,0 +1,9 @@
+# Wazuh Dashboard API Configuration Template
+# Copy this file to wazuh.yml and insert the matching API password configured in .env
+hosts:
+  - 1513629884013:
+      url: "https://wazuh.manager"
+      port: 55000
+      username: wazuh-wui
+      password: "<CHANGE_ME_API_PASSWORD>"
+      run_as: true

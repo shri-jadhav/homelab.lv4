@@ -1,0 +1,76 @@
+# =============================================================================
+# Root .gitignore — Unified Wazuh SOC Home Lab
+# =============================================================================
+
+# --- Environment & Local Secrets ---
+.env
+*.env
+*.env.local
+*.env.*.local
+!.env.example
+secrets/
+credentials/
+*backup*
+
+# --- Active Local Cluster Configurations (Credentials / Hashes) ---
+config/wazuh_dashboard/wazuh.yml
+!config/wazuh_dashboard/wazuh.yml.example
+config/wazuh_indexer/internal_users.yml
+!config/wazuh_indexer/internal_users.yml.example
+
+# --- SSL/TLS Certificates & Private Keys ---
+config/wazuh_indexer_ssl_certs/
+*.pem
+*.key
+*.crt
+*.csr
+
+# --- Binary Installers & Large Archives ---
+*.msi
+agent/*.msi
+*.tar.gz
+*.zip
+
+# --- Python Bytecode, Caches & Virtual Environments ---
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# --- Operating System & Editor Artifacts ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Logs & Runtime Output ---
+logs/
+*.log
+*.pid
+ossec.log
+*.tmp
+
+# --- Docker Local Persistent Data ---
+wazuh-data/
+wazuh-indexer-data/
+
+# --- Retain Essential Portfolio Artifacts & Telemetry ---
+!data/events.jsonl
+!data/eval_scenarios.jsonl
+!data/eval_ground_truth.json
+!data/wazuh_alerts.json
+!artifacts/
+!artifacts_wazuh/

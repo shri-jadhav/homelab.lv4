@@ -1,0 +1,178 @@
+{
+  "catalog_rules_count": 6,
+  "rules_triggered_count": 4,
+  "rules": [
+    {
+      "rule_id": "DET-AUTH-001",
+      "title": "Repeated authentication failures",
+      "severity": "medium",
+      "mitre_attack": [
+        "T1110"
+      ],
+      "mitre_tactics": [
+        "Credential Access"
+      ],
+      "description": "At least 5 failed authentications for the same user from the same source in 5 minutes.",
+      "threshold": "5 failures / 5 minutes / same user + source IP",
+      "recommended_actions": [
+        "Verify whether the source and target user are expected.",
+        "Check adjacent authentication events and endpoint telemetry.",
+        "If unauthorized, block or rate-limit the source through approved controls and reset affected credentials."
+      ],
+      "investigation_questions": [
+        "Is the source IP a known internal subnet, corporate VPN, or external IP?",
+        "Has the target user reported forgetting their password or having sync issues?",
+        "Are there simultaneous failures across other protocols (e.g., Kerberos, NTLM, OAuth)?"
+      ],
+      "enabled": true,
+      "parameters": {
+        "failure_threshold": 5,
+        "window_minutes": 5
+      }
+    },
+    {
+      "rule_id": "DET-AUTH-002",
+      "title": "Password spraying pattern",
+      "severity": "high",
+      "mitre_attack": [
+        "T1110.003"
+      ],
+      "mitre_tactics": [
+        "Credential Access"
+      ],
+      "description": "At least 8 distinct user accounts fail authentication from one source within 10 minutes.",
+      "threshold": "8 distinct users / 10 minutes / same source IP",
+      "recommended_actions": [
+        "Check whether the source is a known corporate proxy, VPN, or identity provider.",
+        "Review targeted accounts for subsequent successful logins.",
+        "Apply approved rate limiting and MFA protections; avoid blocking shared infrastructure without validation."
+      ],
+      "investigation_questions": [
+        "Is the source IP a legitimate outbound proxy, SaaS gateway, or identity provider proxy?",
+        "Are usernames being targeted alphabetically or sequentially (sign of dictionary enumeration)?",
+        "Did any targeted account successfully log in during or immediately after the spray window?"
+      ],
+      "enabled": true,
+      "parameters": {
+        "distinct_user_threshold": 8,
+        "window_minutes": 10
+      }
+    },
+    {
+      "rule_id": "DET-AUTH-003",
+      "title": "Successful login after repeated failures",
+      "severity": "high",
+      "mitre_attack": [
+        "T1110",
+        "T1078"
+      ],
+      "mitre_tactics": [
+        "Credential Access",
+        "Initial Access",
+        "Persistence"
+      ],
+      "description": "A successful authentication follows at least 5 failures for the same user from the same source within 10 minutes.",
+      "threshold": "success within 10 minutes after 5+ failures / same user + source IP",
+      "recommended_actions": [
+        "Validate the successful login with the account owner and expected source/location.",
+        "Review MFA result, device posture, session activity, and the next 15 minutes of events.",
+        "If compromise is suspected, revoke sessions and rotate credentials using the incident-response process."
+      ],
+      "investigation_questions": [
+        "Did the user satisfy MFA requirements on the successful login?",
+        "Does the device fingerprint / user-agent match the user's historical profile?",
+        "What actions were performed in the first 15 minutes following the successful authentication?"
+      ],
+      "enabled": true,
+      "parameters": {
+        "failure_threshold": 5,
+        "window_minutes": 10
+      }
+    },
+    {
+      "rule_id": "DET-IAM-001",
+      "title": "Privilege change after suspicious authentication",
+      "severity": "critical",
+      "mitre_attack": [
+        "T1098"
+      ],
+      "mitre_tactics": [
+        "Persistence",
+        "Privilege Escalation"
+      ],
+      "description": "A privileged role change occurs within 15 minutes of a suspicious login sequence for the same user.",
+      "threshold": "privilege change within 15 minutes after suspicious authentication",
+      "recommended_actions": [
+        "Confirm the role change against an approved change ticket and authorized administrator.",
+        "Inspect identity-provider audit logs and actions taken with the new privilege.",
+        "If unauthorized, remove the grant, revoke sessions, preserve evidence, and escalate to the incident lead."
+      ],
+      "investigation_questions": [
+        "Is there an approved change management ticket corresponding to this privilege grant?",
+        "Was the grant performed by an authorized system administrator or from an administrative console?",
+        "Has the newly assigned role been used to access sensitive assets or modify other accounts?"
+      ],
+      "enabled": true,
+      "parameters": {
+        "window_minutes": 15,
+        "suppress_approved": true
+      }
+    },
+    {
+      "rule_id": "DET-AUTH-004",
+      "title": "Multi-Factor Authentication (MFA) denial anomaly",
+      "severity": "high",
+      "mitre_attack": [
+        "T1621"
+      ],
+      "mitre_tactics": [
+        "Credential Access"
+      ],
+      "description": "At least 2 MFA prompts were denied/rejected for the same user within 10 minutes (MFA fatigue or prompt spamming indicator).",
+      "threshold": "2 MFA denials / 10 minutes / same user",
+      "recommended_actions": [
+        "Contact the user out-of-band to confirm if they rejected MFA prompts.",
+        "Review identity provider logs for MFA challenge types and push delivery status.",
+        "Reset user credentials and temporarily require number matching or FIDO2 tokens if prompt bombing is active."
+      ],
+      "investigation_questions": [
+        "Did the user report receiving unsolicited MFA pushes or phone calls?",
+        "Did an MFA approval eventually occur after multiple denials?",
+        "What IP sources originated the authentication attempts triggering MFA?"
+      ],
+      "enabled": true,
+      "parameters": {
+        "denial_threshold": 2,
+        "window_minutes": 10
+      }
+    },
+    {
+      "rule_id": "DET-NET-001",
+      "title": "Distributed credential attack on single account",
+      "severity": "high",
+      "mitre_attack": [
+        "T1110.004"
+      ],
+      "mitre_tactics": [
+        "Credential Access"
+      ],
+      "description": "At least 4 distinct source IPs fail authentication against the same target user within 15 minutes.",
+      "threshold": "4 distinct source IPs / 15 minutes / same user",
+      "recommended_actions": [
+        "Assess if the account is subject to a targeted credential stuffing or botnet campaign.",
+        "Check whether password protection / smart lockout has engaged for the account.",
+        "Enforce conditional access policies and review geo-velocity anomalies."
+      ],
+      "investigation_questions": [
+        "Are the source IPs part of a known botnet, VPN proxy pool, or TOR exit nodes?",
+        "Is the target user a high-profile executive, administrator, or VIP account?",
+        "Are there successful logins for this account from any of the distributed sources?"
+      ],
+      "enabled": true,
+      "parameters": {
+        "distinct_source_threshold": 4,
+        "window_minutes": 15
+      }
+    }
+  ]
+}

@@ -1,0 +1,408 @@
+[
+  {
+    "alert_id": "DET-IAM-001-E007",
+    "rule_id": "DET-IAM-001",
+    "title": "Privilege change after suspicious authentication",
+    "severity": "critical",
+    "status": "new",
+    "entity": "user=a.patel; host=IDP-01",
+    "first_seen": "2026-10-16T09:00:00Z",
+    "last_seen": "2026-10-16T09:06:00Z",
+    "event_count": 7,
+    "event_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E004",
+      "E005",
+      "E006",
+      "E007"
+    ],
+    "mitre_attack": [
+      "T1098"
+    ],
+    "mitre_tactics": [
+      "Persistence",
+      "Privilege Escalation"
+    ],
+    "why_it_fired": "Privilege change to 'GlobalAdmin' for 'a.patel' occurred within 15 minutes of a successful login following repeated failures.",
+    "rule_threshold": "privilege change within 15 minutes after suspicious authentication",
+    "recommended_actions": [
+      "Confirm the role change against an approved change ticket and authorized administrator.",
+      "Inspect identity-provider audit logs and actions taken with the new privilege.",
+      "If unauthorized, remove the grant, revoke sessions, preserve evidence, and escalate to the incident lead."
+    ],
+    "evidence": [
+      {
+        "event_id": "E001",
+        "timestamp": "2026-10-16T09:00:00Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E002",
+        "timestamp": "2026-10-16T09:00:35Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E003",
+        "timestamp": "2026-10-16T09:01:05Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E004",
+        "timestamp": "2026-10-16T09:01:40Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E005",
+        "timestamp": "2026-10-16T09:02:10Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E006",
+        "timestamp": "2026-10-16T09:03:00Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "success",
+        "message": "Authentication succeeded"
+      },
+      {
+        "event_id": "E007",
+        "timestamp": "2026-10-16T09:06:00Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "unknown",
+        "message": "Role granted by admin-console"
+      }
+    ],
+    "user": "a.patel",
+    "host": "IDP-01",
+    "role_granted": "GlobalAdmin",
+    "ticket_id": ""
+  },
+  {
+    "alert_id": "DET-AUTH-002-E018",
+    "rule_id": "DET-AUTH-002",
+    "title": "Password spraying pattern",
+    "severity": "high",
+    "status": "new",
+    "entity": "source_ip=198.51.100.23",
+    "first_seen": "2026-10-16T09:20:00Z",
+    "last_seen": "2026-10-16T09:23:20Z",
+    "event_count": 9,
+    "event_ids": [
+      "E010",
+      "E011",
+      "E012",
+      "E013",
+      "E014",
+      "E015",
+      "E016",
+      "E017",
+      "E018"
+    ],
+    "mitre_attack": [
+      "T1110.003"
+    ],
+    "mitre_tactics": [
+      "Credential Access"
+    ],
+    "why_it_fired": "Source 198.51.100.23 failed authentication for 9 distinct users in 10 minutes; threshold is 8.",
+    "rule_threshold": "8 distinct users / 10 minutes / same source IP",
+    "recommended_actions": [
+      "Check whether the source is a known corporate proxy, VPN, or identity provider.",
+      "Review targeted accounts for subsequent successful logins.",
+      "Apply approved rate limiting and MFA protections; avoid blocking shared infrastructure without validation."
+    ],
+    "evidence": [
+      {
+        "event_id": "E010",
+        "timestamp": "2026-10-16T09:20:00Z",
+        "user": "user01",
+        "source_ip": "198.51.100.23",
+        "host": "VPN-01",
+        "outcome": "failure",
+        "message": "Synthetic password spray event"
+      },
+      {
+        "event_id": "E011",
+        "timestamp": "2026-10-16T09:20:25Z",
+        "user": "user02",
+        "source_ip": "198.51.100.23",
+        "host": "VPN-01",
+        "outcome": "failure",
+        "message": "Synthetic password spray event"
+      },
+      {
+        "event_id": "E012",
+        "timestamp": "2026-10-16T09:20:50Z",
+        "user": "user03",
+        "source_ip": "198.51.100.23",
+        "host": "VPN-01",
+        "outcome": "failure",
+        "message": "Synthetic password spray event"
+      },
+      {
+        "event_id": "E013",
+        "timestamp": "2026-10-16T09:21:15Z",
+        "user": "user04",
+        "source_ip": "198.51.100.23",
+        "host": "VPN-01",
+        "outcome": "failure",
+        "message": "Synthetic password spray event"
+      },
+      {
+        "event_id": "E014",
+        "timestamp": "2026-10-16T09:21:40Z",
+        "user": "user05",
+        "source_ip": "198.51.100.23",
+        "host": "VPN-01",
+        "outcome": "failure",
+        "message": "Synthetic password spray event"
+      },
+      {
+        "event_id": "E015",
+        "timestamp": "2026-10-16T09:22:05Z",
+        "user": "user06",
+        "source_ip": "198.51.100.23",
+        "host": "VPN-01",
+        "outcome": "failure",
+        "message": "Synthetic password spray event"
+      },
+      {
+        "event_id": "E016",
+        "timestamp": "2026-10-16T09:22:30Z",
+        "user": "user07",
+        "source_ip": "198.51.100.23",
+        "host": "VPN-01",
+        "outcome": "failure",
+        "message": "Synthetic password spray event"
+      },
+      {
+        "event_id": "E017",
+        "timestamp": "2026-10-16T09:22:55Z",
+        "user": "user08",
+        "source_ip": "198.51.100.23",
+        "host": "VPN-01",
+        "outcome": "failure",
+        "message": "Synthetic password spray event"
+      },
+      {
+        "event_id": "E018",
+        "timestamp": "2026-10-16T09:23:20Z",
+        "user": "user09",
+        "source_ip": "198.51.100.23",
+        "host": "VPN-01",
+        "outcome": "failure",
+        "message": "Synthetic password spray event"
+      }
+    ],
+    "source_ip": "198.51.100.23",
+    "targeted_users": [
+      "user01",
+      "user02",
+      "user03",
+      "user04",
+      "user05",
+      "user06",
+      "user07",
+      "user08",
+      "user09"
+    ]
+  },
+  {
+    "alert_id": "DET-AUTH-003-E006",
+    "rule_id": "DET-AUTH-003",
+    "title": "Successful login after repeated failures",
+    "severity": "high",
+    "status": "new",
+    "entity": "user=a.patel; source_ip=203.0.113.77",
+    "first_seen": "2026-10-16T09:00:00Z",
+    "last_seen": "2026-10-16T09:03:00Z",
+    "event_count": 6,
+    "event_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E004",
+      "E005",
+      "E006"
+    ],
+    "mitre_attack": [
+      "T1110",
+      "T1078"
+    ],
+    "mitre_tactics": [
+      "Credential Access",
+      "Initial Access",
+      "Persistence"
+    ],
+    "why_it_fired": "A successful login for 'a.patel' from 203.0.113.77 followed 5 failures within 10 minutes.",
+    "rule_threshold": "success within 10 minutes after 5+ failures / same user + source IP",
+    "recommended_actions": [
+      "Validate the successful login with the account owner and expected source/location.",
+      "Review MFA result, device posture, session activity, and the next 15 minutes of events.",
+      "If compromise is suspected, revoke sessions and rotate credentials using the incident-response process."
+    ],
+    "evidence": [
+      {
+        "event_id": "E001",
+        "timestamp": "2026-10-16T09:00:00Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E002",
+        "timestamp": "2026-10-16T09:00:35Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E003",
+        "timestamp": "2026-10-16T09:01:05Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E004",
+        "timestamp": "2026-10-16T09:01:40Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E005",
+        "timestamp": "2026-10-16T09:02:10Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E006",
+        "timestamp": "2026-10-16T09:03:00Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "success",
+        "message": "Authentication succeeded"
+      }
+    ],
+    "source_ip": "203.0.113.77",
+    "user": "a.patel"
+  },
+  {
+    "alert_id": "DET-AUTH-001-E005",
+    "rule_id": "DET-AUTH-001",
+    "title": "Repeated authentication failures",
+    "severity": "medium",
+    "status": "new",
+    "entity": "user=a.patel; source_ip=203.0.113.77",
+    "first_seen": "2026-10-16T09:00:00Z",
+    "last_seen": "2026-10-16T09:02:10Z",
+    "event_count": 5,
+    "event_ids": [
+      "E001",
+      "E002",
+      "E003",
+      "E004",
+      "E005"
+    ],
+    "mitre_attack": [
+      "T1110"
+    ],
+    "mitre_tactics": [
+      "Credential Access"
+    ],
+    "why_it_fired": "Observed 5 failed authentications for user 'a.patel' from 203.0.113.77 within 5 minutes; threshold is 5.",
+    "rule_threshold": "5 failures / 5 minutes / same user + source IP",
+    "recommended_actions": [
+      "Verify whether the source and target user are expected.",
+      "Check adjacent authentication events and endpoint telemetry.",
+      "If unauthorized, block or rate-limit the source through approved controls and reset affected credentials."
+    ],
+    "evidence": [
+      {
+        "event_id": "E001",
+        "timestamp": "2026-10-16T09:00:00Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E002",
+        "timestamp": "2026-10-16T09:00:35Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E003",
+        "timestamp": "2026-10-16T09:01:05Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E004",
+        "timestamp": "2026-10-16T09:01:40Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      },
+      {
+        "event_id": "E005",
+        "timestamp": "2026-10-16T09:02:10Z",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "host": "IDP-01",
+        "outcome": "failure",
+        "message": "Invalid password"
+      }
+    ],
+    "source_ip": "203.0.113.77",
+    "user": "a.patel"
+  }
+]

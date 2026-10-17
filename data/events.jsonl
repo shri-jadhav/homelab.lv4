@@ -1,0 +1,18 @@
+{"event_id":"E001","timestamp":"2026-10-16T09:00:00Z","host":"IDP-01","event_type":"auth","user":"a.patel","source_ip":"203.0.113.77","outcome":"failure","message":"Invalid password"}
+{"event_id":"E002","timestamp":"2026-10-16T09:00:35Z","host":"IDP-01","event_type":"auth","user":"a.patel","source_ip":"203.0.113.77","outcome":"failure","message":"Invalid password"}
+{"event_id":"E003","timestamp":"2026-10-16T09:01:05Z","host":"IDP-01","event_type":"auth","user":"a.patel","source_ip":"203.0.113.77","outcome":"failure","message":"Invalid password"}
+{"event_id":"E004","timestamp":"2026-10-16T09:01:40Z","host":"IDP-01","event_type":"auth","user":"a.patel","source_ip":"203.0.113.77","outcome":"failure","message":"Invalid password"}
+{"event_id":"E005","timestamp":"2026-10-16T09:02:10Z","host":"IDP-01","event_type":"auth","user":"a.patel","source_ip":"203.0.113.77","outcome":"failure","message":"Invalid password"}
+{"event_id":"E006","timestamp":"2026-10-16T09:03:00Z","host":"IDP-01","event_type":"auth","user":"a.patel","source_ip":"203.0.113.77","outcome":"success","message":"Authentication succeeded"}
+{"event_id":"E007","timestamp":"2026-10-16T09:06:00Z","host":"IDP-01","event_type":"privilege_change","user":"a.patel","source_ip":"203.0.113.77","role":"GlobalAdmin","message":"Role granted by admin-console"}
+{"event_id":"E008","timestamp":"2026-10-16T09:10:00Z","host":"MAIL-01","event_type":"auth","user":"m.rao","source_ip":"192.0.2.10","outcome":"failure","message":"Single failed login; expected negative control"}
+{"event_id":"E009","timestamp":"2026-10-16T09:12:00Z","host":"MAIL-01","event_type":"auth","user":"m.rao","source_ip":"192.0.2.10","outcome":"success","message":"Normal user login"}
+{"event_id":"E010","timestamp":"2026-10-16T09:20:00Z","host":"VPN-01","event_type":"auth","user":"user01","source_ip":"198.51.100.23","outcome":"failure","message":"Synthetic password spray event"}
+{"event_id":"E011","timestamp":"2026-10-16T09:20:25Z","host":"VPN-01","event_type":"auth","user":"user02","source_ip":"198.51.100.23","outcome":"failure","message":"Synthetic password spray event"}
+{"event_id":"E012","timestamp":"2026-10-16T09:20:50Z","host":"VPN-01","event_type":"auth","user":"user03","source_ip":"198.51.100.23","outcome":"failure","message":"Synthetic password spray event"}
+{"event_id":"E013","timestamp":"2026-10-16T09:21:15Z","host":"VPN-01","event_type":"auth","user":"user04","source_ip":"198.51.100.23","outcome":"failure","message":"Synthetic password spray event"}
+{"event_id":"E014","timestamp":"2026-10-16T09:21:40Z","host":"VPN-01","event_type":"auth","user":"user05","source_ip":"198.51.100.23","outcome":"failure","message":"Synthetic password spray event"}
+{"event_id":"E015","timestamp":"2026-10-16T09:22:05Z","host":"VPN-01","event_type":"auth","user":"user06","source_ip":"198.51.100.23","outcome":"failure","message":"Synthetic password spray event"}
+{"event_id":"E016","timestamp":"2026-10-16T09:22:30Z","host":"VPN-01","event_type":"auth","user":"user07","source_ip":"198.51.100.23","outcome":"failure","message":"Synthetic password spray event"}
+{"event_id":"E017","timestamp":"2026-10-16T09:22:55Z","host":"VPN-01","event_type":"auth","user":"user08","source_ip":"198.51.100.23","outcome":"failure","message":"Synthetic password spray event"}
+{"event_id":"E018","timestamp":"2026-10-16T09:23:20Z","host":"VPN-01","event_type":"auth","user":"user09","source_ip":"198.51.100.23","outcome":"failure","message":"Synthetic password spray event"}

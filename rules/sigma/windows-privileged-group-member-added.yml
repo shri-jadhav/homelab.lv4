@@ -1,0 +1,27 @@
+title: Windows Privileged Group Member Added
+author: SOC Detection Engineering Lab contributors
+date: 2026/10/17
+id: 2cfcf916-4eae-4d1a-a4ef-a7c99f8d0b20
+status: experimental
+description: Detects an event indicating that a member was added to a security-enabled global, local, or universal group. Confirm the target group, actor, change approval, and surrounding activity before classifying it as malicious.
+references:
+    - https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4728
+    - https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4732
+    - https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4756
+tags:
+    - attack.persistence
+    - attack.t1098
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID:
+            - 4728
+            - 4732
+            - 4756
+    condition: selection
+falsepositives:
+    - Approved identity lifecycle or access administration
+    - Authorized application deployment or service onboarding
+level: high

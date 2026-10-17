@@ -1,0 +1,179 @@
+{
+  "dataset": "data\\eval_scenarios.jsonl",
+  "ground_truth": "data\\eval_ground_truth.json",
+  "total_scenarios": 10,
+  "confusion_matrix": {
+    "true_positives": 5,
+    "true_negatives": 5,
+    "false_positives": 0,
+    "false_negatives": 0
+  },
+  "metrics": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "accuracy": 1.0,
+    "specificity": 1.0
+  },
+  "per_rule_performance": {
+    "DET-AUTH-001": {
+      "expected": 2,
+      "detected": 2,
+      "tp": 2,
+      "fn": 0,
+      "fp": 0
+    },
+    "DET-AUTH-002": {
+      "expected": 1,
+      "detected": 1,
+      "tp": 1,
+      "fn": 0,
+      "fp": 0
+    },
+    "DET-AUTH-003": {
+      "expected": 1,
+      "detected": 1,
+      "tp": 1,
+      "fn": 0,
+      "fp": 0
+    },
+    "DET-IAM-001": {
+      "expected": 1,
+      "detected": 1,
+      "tp": 1,
+      "fn": 0,
+      "fp": 0
+    },
+    "DET-AUTH-004": {
+      "expected": 1,
+      "detected": 1,
+      "tp": 1,
+      "fn": 0,
+      "fp": 0
+    },
+    "DET-NET-001": {
+      "expected": 1,
+      "detected": 1,
+      "tp": 1,
+      "fn": 0,
+      "fp": 0
+    }
+  },
+  "scenarios": [
+    {
+      "scenario_id": "SCN-01",
+      "description": "Rapid password brute force against d.miller (5 failures in 2 min)",
+      "is_malicious": true,
+      "expected_rules": [
+        "DET-AUTH-001"
+      ],
+      "actual_rules": [
+        "DET-AUTH-001"
+      ],
+      "status": "TP",
+      "notes": "All expected detections fired without extraneous alerts."
+    },
+    {
+      "scenario_id": "SCN-02",
+      "description": "Horizontal password spraying across 8 distinct accounts from 203.0.113.200",
+      "is_malicious": true,
+      "expected_rules": [
+        "DET-AUTH-002"
+      ],
+      "actual_rules": [
+        "DET-AUTH-002"
+      ],
+      "status": "TP",
+      "notes": "All expected detections fired without extraneous alerts."
+    },
+    {
+      "scenario_id": "SCN-03-04",
+      "description": "Brute force followed by successful login and immediate DomainAdmin role escalation",
+      "is_malicious": true,
+      "expected_rules": [
+        "DET-AUTH-001",
+        "DET-AUTH-003",
+        "DET-IAM-001"
+      ],
+      "actual_rules": [
+        "DET-AUTH-001",
+        "DET-AUTH-003",
+        "DET-IAM-001"
+      ],
+      "status": "TP",
+      "notes": "All expected detections fired without extraneous alerts."
+    },
+    {
+      "scenario_id": "SCN-05",
+      "description": "MFA prompt bombing / push exhaustion against c.taylor (2 denials in 1 min)",
+      "is_malicious": true,
+      "expected_rules": [
+        "DET-AUTH-004"
+      ],
+      "actual_rules": [
+        "DET-AUTH-004"
+      ],
+      "status": "TP",
+      "notes": "All expected detections fired without extraneous alerts."
+    },
+    {
+      "scenario_id": "SCN-06",
+      "description": "Distributed botnet credential stuffing against vip_exec from 4 distinct IPs",
+      "is_malicious": true,
+      "expected_rules": [
+        "DET-NET-001"
+      ],
+      "actual_rules": [
+        "DET-NET-001"
+      ],
+      "status": "TP",
+      "notes": "All expected detections fired without extraneous alerts."
+    },
+    {
+      "scenario_id": "SCN-BEN-01",
+      "description": "Benign normal user password typo followed by success",
+      "is_malicious": false,
+      "expected_rules": [],
+      "actual_rules": [],
+      "status": "TN",
+      "notes": "Benign control correctly suppressed (zero alerts)."
+    },
+    {
+      "scenario_id": "SCN-BEN-02",
+      "description": "Slow sporadic failed logins (2 failures spread over 35 minutes)",
+      "is_malicious": false,
+      "expected_rules": [],
+      "actual_rules": [],
+      "status": "TN",
+      "notes": "Benign control correctly suppressed (zero alerts)."
+    },
+    {
+      "scenario_id": "SCN-BEN-03",
+      "description": "Shared corporate proxy with occasional normal logins/failures from 3 users",
+      "is_malicious": false,
+      "expected_rules": [],
+      "actual_rules": [],
+      "status": "TN",
+      "notes": "Benign control correctly suppressed (zero alerts)."
+    },
+    {
+      "scenario_id": "SCN-BEN-04",
+      "description": "Authorized administrative role change with approved change ticket CHG-8812",
+      "is_malicious": false,
+      "expected_rules": [],
+      "actual_rules": [],
+      "status": "TN",
+      "notes": "Benign control correctly suppressed (zero alerts)."
+    },
+    {
+      "scenario_id": "SCN-BEN-05",
+      "description": "Boundary negative control: 4 failures in 2 minutes (threshold is 5)",
+      "is_malicious": false,
+      "expected_rules": [],
+      "actual_rules": [],
+      "status": "TN",
+      "notes": "Benign control correctly suppressed (zero alerts)."
+    }
+  ],
+  "limitations_and_disclaimer": "These metrics evaluate detection logic against controlled, synthetic scenarios. In production SIEM environments, real-world noise, high event velocity, network address translation (NAT), and unpredictable human behavior will result in lower precision and require environment-specific baseline tuning. Do not cite benchmark test scores as guaranteed production detection rates."
+}

@@ -1,0 +1,239 @@
+[
+  {
+    "incident_id": "INC-20261016-001",
+    "title": "Compromised Account and Privilege Escalation (a.patel)",
+    "severity": "critical",
+    "status": "open",
+    "entity": "User: a.patel",
+    "first_seen": "2026-10-16T09:00:00Z",
+    "last_seen": "2026-10-16T09:06:00Z",
+    "alert_count": 3,
+    "event_count": 7,
+    "alert_ids": [
+      "DET-IAM-001-E007",
+      "DET-AUTH-003-E006",
+      "DET-AUTH-001-E005"
+    ],
+    "rule_ids": [
+      "DET-AUTH-001",
+      "DET-AUTH-003",
+      "DET-IAM-001"
+    ],
+    "mitre_attack": [
+      "T1078",
+      "T1098",
+      "T1110"
+    ],
+    "mitre_tactics": [
+      "Credential Access",
+      "Initial Access",
+      "Persistence",
+      "Privilege Escalation"
+    ],
+    "timeline": [
+      {
+        "timestamp": "2026-10-16T09:00:00Z",
+        "event_id": "E001",
+        "host": "IDP-01",
+        "event_type": "auth",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'a.patel' from 203.0.113.77 on IDP-01 - Invalid password"
+      },
+      {
+        "timestamp": "2026-10-16T09:00:35Z",
+        "event_id": "E002",
+        "host": "IDP-01",
+        "event_type": "auth",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'a.patel' from 203.0.113.77 on IDP-01 - Invalid password"
+      },
+      {
+        "timestamp": "2026-10-16T09:01:05Z",
+        "event_id": "E003",
+        "host": "IDP-01",
+        "event_type": "auth",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'a.patel' from 203.0.113.77 on IDP-01 - Invalid password"
+      },
+      {
+        "timestamp": "2026-10-16T09:01:40Z",
+        "event_id": "E004",
+        "host": "IDP-01",
+        "event_type": "auth",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'a.patel' from 203.0.113.77 on IDP-01 - Invalid password"
+      },
+      {
+        "timestamp": "2026-10-16T09:02:10Z",
+        "event_id": "E005",
+        "host": "IDP-01",
+        "event_type": "auth",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'a.patel' from 203.0.113.77 on IDP-01 - Invalid password"
+      },
+      {
+        "timestamp": "2026-10-16T09:03:00Z",
+        "event_id": "E006",
+        "host": "IDP-01",
+        "event_type": "auth",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "outcome": "success",
+        "description": "Authentication SUCCEEDED for 'a.patel' from 203.0.113.77 on IDP-01 - Authentication succeeded"
+      },
+      {
+        "timestamp": "2026-10-16T09:06:00Z",
+        "event_id": "E007",
+        "host": "IDP-01",
+        "event_type": "privilege_change",
+        "user": "a.patel",
+        "source_ip": "203.0.113.77",
+        "outcome": "unknown",
+        "description": "Privilege change: 'a.patel' assigned role 'GlobalAdmin' on IDP-01 - Role granted by admin-console"
+      }
+    ],
+    "summary": "Multi-stage intrusion sequence detected for user 'a.patel'. Activity progressed from repeated authentication failures to a successful login, immediately followed by an unauthorized or high-risk administrative role change.",
+    "recommended_actions": [
+      "Confirm the role change against an approved change ticket and authorized administrator.",
+      "Inspect identity-provider audit logs and actions taken with the new privilege.",
+      "If unauthorized, remove the grant, revoke sessions, preserve evidence, and escalate to the incident lead.",
+      "Validate the successful login with the account owner and expected source/location.",
+      "Review MFA result, device posture, session activity, and the next 15 minutes of events.",
+      "If compromise is suspected, revoke sessions and rotate credentials using the incident-response process.",
+      "Verify whether the source and target user are expected.",
+      "Check adjacent authentication events and endpoint telemetry.",
+      "If unauthorized, block or rate-limit the source through approved controls and reset affected credentials."
+    ]
+  },
+  {
+    "incident_id": "INC-20261016-002",
+    "title": "Password Spraying Campaign from 198.51.100.23",
+    "severity": "high",
+    "status": "open",
+    "entity": "Source IP: 198.51.100.23",
+    "first_seen": "2026-10-16T09:20:00Z",
+    "last_seen": "2026-10-16T09:23:20Z",
+    "alert_count": 1,
+    "event_count": 9,
+    "alert_ids": [
+      "DET-AUTH-002-E018"
+    ],
+    "rule_ids": [
+      "DET-AUTH-002"
+    ],
+    "mitre_attack": [
+      "T1110.003"
+    ],
+    "mitre_tactics": [
+      "Credential Access"
+    ],
+    "timeline": [
+      {
+        "timestamp": "2026-10-16T09:20:00Z",
+        "event_id": "E010",
+        "host": "VPN-01",
+        "event_type": "auth",
+        "user": "user01",
+        "source_ip": "198.51.100.23",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'user01' from 198.51.100.23 on VPN-01 - Synthetic password spray event"
+      },
+      {
+        "timestamp": "2026-10-16T09:20:25Z",
+        "event_id": "E011",
+        "host": "VPN-01",
+        "event_type": "auth",
+        "user": "user02",
+        "source_ip": "198.51.100.23",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'user02' from 198.51.100.23 on VPN-01 - Synthetic password spray event"
+      },
+      {
+        "timestamp": "2026-10-16T09:20:50Z",
+        "event_id": "E012",
+        "host": "VPN-01",
+        "event_type": "auth",
+        "user": "user03",
+        "source_ip": "198.51.100.23",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'user03' from 198.51.100.23 on VPN-01 - Synthetic password spray event"
+      },
+      {
+        "timestamp": "2026-10-16T09:21:15Z",
+        "event_id": "E013",
+        "host": "VPN-01",
+        "event_type": "auth",
+        "user": "user04",
+        "source_ip": "198.51.100.23",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'user04' from 198.51.100.23 on VPN-01 - Synthetic password spray event"
+      },
+      {
+        "timestamp": "2026-10-16T09:21:40Z",
+        "event_id": "E014",
+        "host": "VPN-01",
+        "event_type": "auth",
+        "user": "user05",
+        "source_ip": "198.51.100.23",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'user05' from 198.51.100.23 on VPN-01 - Synthetic password spray event"
+      },
+      {
+        "timestamp": "2026-10-16T09:22:05Z",
+        "event_id": "E015",
+        "host": "VPN-01",
+        "event_type": "auth",
+        "user": "user06",
+        "source_ip": "198.51.100.23",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'user06' from 198.51.100.23 on VPN-01 - Synthetic password spray event"
+      },
+      {
+        "timestamp": "2026-10-16T09:22:30Z",
+        "event_id": "E016",
+        "host": "VPN-01",
+        "event_type": "auth",
+        "user": "user07",
+        "source_ip": "198.51.100.23",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'user07' from 198.51.100.23 on VPN-01 - Synthetic password spray event"
+      },
+      {
+        "timestamp": "2026-10-16T09:22:55Z",
+        "event_id": "E017",
+        "host": "VPN-01",
+        "event_type": "auth",
+        "user": "user08",
+        "source_ip": "198.51.100.23",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'user08' from 198.51.100.23 on VPN-01 - Synthetic password spray event"
+      },
+      {
+        "timestamp": "2026-10-16T09:23:20Z",
+        "event_id": "E018",
+        "host": "VPN-01",
+        "event_type": "auth",
+        "user": "user09",
+        "source_ip": "198.51.100.23",
+        "outcome": "failure",
+        "description": "Authentication FAILED (failure) for 'user09' from 198.51.100.23 on VPN-01 - Synthetic password spray event"
+      }
+    ],
+    "summary": "External or unmanaged source 198.51.100.23 conducted horizontal password spraying against multiple distinct enterprise identities.",
+    "recommended_actions": [
+      "Check whether the source is a known corporate proxy, VPN, or identity provider.",
+      "Review targeted accounts for subsequent successful logins.",
+      "Apply approved rate limiting and MFA protections; avoid blocking shared infrastructure without validation."
+    ]
+  }
+]
